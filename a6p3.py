@@ -36,6 +36,8 @@ Problem 3
 
 from sys import flags
 
+import a6p2
+
 
 '''
 Use this section to import your code from A6P2 
@@ -49,7 +51,28 @@ def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float
 
 
 def bestSuccessor(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> dict:
-    raise NotImplementedError()
+    best_map = mapping
+    best_score = a6p2.keyScore(mapping, ciphertext, frequencies, n)
+
+    letters = [c for c in mapping if c != " "]
+
+    for i in range(len(letters)):
+        for j in range(i+1, len(letters)):
+            new_map = mapping.copy()
+            a, b = letters[i], letters[j]
+
+            # swap values
+            new_map[a], new_map[b] = mapping[b], mapping[a]
+
+            score = a6p2.keyScore(new_map, ciphertext, frequencies, n)
+
+            if score > best_score:
+                best_score = score
+                best_map = new_map
+            elif score == best_score:
+                best_map = breakKeyScoreTie(mapping, best_map, new_map)
+
+    return best_map
 
 def breakKeyScoreTie(originalMapping, successorMappingA, successorMappingB):
     """

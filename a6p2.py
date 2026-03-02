@@ -37,7 +37,18 @@ Problem 2
 from sys import flags
 
 def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float:
-    raise NotImplementedError()
+    # decrypt
+    deciphered = "".join(mapping.get(c, c) for c in ciphertext)
+
+    # count n-grams
+    score = 0.0
+    for i in range(len(deciphered) - n + 1):
+        gram = deciphered[i:i+n]
+        c = 1  # each occurrence counted once in sliding window
+        f = frequencies.get(gram, 0.0)
+        score += f
+
+    return score
   
 
 def test():

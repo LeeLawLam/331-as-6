@@ -41,8 +41,24 @@ def ngramsFreqs(text: str, n: int) -> dict:
     text: the content string
     n: the size of the n-grams
     """
-    # raise NotImplementedError()
-    
+    # Keep only uppercase letters and space
+    allowed = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ ")
+    filtered = "".join(c for c in text if c in allowed)
+
+    counts = {}
+    total = 0
+
+    for i in range(len(filtered) - n + 1):
+        gram = filtered[i:i+n]
+        counts[gram] = counts.get(gram, 0) + 1
+        total += 1
+
+    # Convert to relative frequencies
+    freqs = {}
+    for gram in counts:
+        freqs[gram] = counts[gram] / total
+
+    return freqs    
 
 def test():
     "Run tests"
